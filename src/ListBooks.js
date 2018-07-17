@@ -1,14 +1,10 @@
 import React from 'react'
 
 const ListBooks = (props) => (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
-            </div>
             <div className="list-books-content">
               <div>
                 <div className="bookshelf">
-                  <h2 className="bookshelf-title">Currently Reading</h2>
+                  <h2 className="bookshelf-title">{props.shelf}</h2>
                   <div className="bookshelf-books">
                     <ol className="books-grid">
                     {props.books.map((book)=>(
@@ -36,10 +32,6 @@ const ListBooks = (props) => (
                 </div>
               </div>
             </div>
-            <div className="open-search">
-              <a href="#">Add a book</a>
-            </div>
-          </div>
 );
 
 export default ListBooks;
