@@ -25,13 +25,18 @@ class SearchBooks extends React.Component {
  */
 	updateQuery = (query)=> {
 		this.setState({query: query.trim()});
-		BooksAPI.search(query)
-		.then((books)=> {
-			this.setState((state)=>({
-				showBooks: books
-			}));
-		})
-		.catch((e)=>{console.log(e)})
+		if(query.trim()){
+			BooksAPI.search(query)
+			.then((books)=> {
+				if(!books || !books.length) books = [];
+				this.setState((state)=>({
+					showBooks: books
+				}));
+			})
+			.catch((e)=>{console.log(e)})
+		}else{
+			this.setState({showBooks: []});
+		}
 	};
 
 	render(){
