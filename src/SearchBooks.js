@@ -24,13 +24,22 @@ class SearchBooks extends React.Component {
  * @return : none
  */
 	updateQuery = (query)=> {
+		const mainPageBooks = this.props.books;
 		this.setState({query: query.trim()});
 		if(query.trim()){
 			BooksAPI.search(query)
-			.then((books)=> {
-				if(!books || !books.length) books = [];
+			.then((searchedBooks)=> {
+				if(!searchedBooks || !searchedBooks.length) searchedBooks = [];
+				searchedBooks = searchedBooks.map((book)=>{
+					for(const mainPageBook of mainPageBooks){
+						if(mainPageBook.id === book.id){
+							book = mainPageBook;
+						}
+					}
+					return book;
+				});
 				this.setState((state)=>({
-					showBooks: books
+					showBooks: searchedBooks
 				}));
 			})
 			.catch((e)=>{console.log(e)})
@@ -68,7 +77,7 @@ class SearchBooks extends React.Component {
 								<div className="book-top">
 									<div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail)?book.imageLinks.thumbnail:''})` }}></div>
 										<div className="book-shelf-changer">
-											<select defaultValue={'none'} onChange={(event)=>{}}>
+											<select defaultValue={ book.shelf? book.shelf: 'none' } onChange={(event)=>{}}>
 												<option value="move" disabled>Move to...</option>
 												<option value="currentlyReading">Currently Reading</option>
 												<option value="wantToRead">Want to Read</option>
