@@ -26,7 +26,7 @@ class SearchBooks extends React.Component {
    */
   updateQuery = (query) => {
     // get the book lists from main page
-    const mainPageBooks = this.props.books;
+    const { mainPageBooks } = this.props;
 
     // Update the query state
     this.setState({ query: query.trim() });
@@ -70,7 +70,8 @@ class SearchBooks extends React.Component {
    * or re-rendered to the DOM.
    */
   render() {
-    const { query } = this.state;
+    const { query, showBooks } = this.state;
+    const { onChangeShelf } = this.props;
     return (
       <div className="search-books">
         <div className="search-books-bar">
@@ -96,13 +97,13 @@ class SearchBooks extends React.Component {
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            { this.state.showBooks.map(book => (
+            { showBooks.map(book => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : ''})` }} />
                     <div className="book-shelf-changer">
-                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => { this.props.onChangeShelf(book, event.target.value); }}>
+                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => { onChangeShelf(book, event.target.value); }}>
                         <option value="move" disabled>
                           Move to...
                         </option>

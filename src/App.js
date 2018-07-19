@@ -68,16 +68,17 @@ class BooksApp extends React.Component {
    * or re-rendered to the DOM.
    */
   render() {
-    let readBooks = [];
-    let readingBooks = [];
-    let wantToReadBooks = [];
+    const readBooks = [];
+    const readingBooks = [];
+    const wantToReadBooks = [];
+    const { books } = this.state;
     /**
      * loop through all the books and put it in 3 different array
      * based on the bookshelf they belogs to. Later these arrays
      * are passed to to ListBooks component as props which
      * are used to render books in different section as per shelf
      */
-    this.state.books.map((book) => {
+    books.map((book) => {
       switch (book.shelf) {
         case 'read':
           readBooks.push(book);
@@ -117,7 +118,7 @@ class BooksApp extends React.Component {
           exact
           path="/search"
           render={() => (
-            <SearchBooks books={this.state.books} onChangeShelf={this.moveToShelf} />
+            <SearchBooks mainPageBooks={books} onChangeShelf={this.moveToShelf} />
           )}
         />
       </div>
