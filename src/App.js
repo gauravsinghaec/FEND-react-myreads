@@ -1,49 +1,84 @@
-import React from 'react'
-import './App.css'
+import React from 'react';
+import './App.css';
 import ListBooks from './ListBooks';
-import * as BooksAPI from './BooksAPI'
-import { Route } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import * as BooksAPI from './BooksAPI';
+import { Route } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import SearchBooks from './SearchBooks';
 
 class BooksApp extends React.Component {
+// Add state as class property outside contructor
   state = {
     books: []
   }
-  //Fetch the books from the BooksAPI
-  componentDidMount(){
+
+  /**
+   * This is a lifecycle hook which runs immediate after the component
+   * output has been rendered to the DOM.
+   */
+  componentDidMount() {
+    // Fetch the books from the BooksAPI
     BooksAPI.getAll()
-    .then((books)=> {
-      this.setState({books});
-      console.log(books);
-    })
+      .then((books) => {
+        this.setState({ books });
+        console.log(books);
+      });
   }
 
-/* Upadte the books shelf in BooksAPI
- * and update the app state to re-render the view
- */
-  moveToShelf = (book,shelf)=>{
-    BooksAPI.update(book,shelf);
-    this.setState((state)=>{
-      let isNewBookAdded = true,
-          updatedBooks = [];
-      updatedBooks = state.books.map((bk)=>{
-        if(book.id === bk.id){
+  /**
+   * This method upadtes the books shelf in BooksAPI
+   * and it also update the app state to re-render the view
+   *
+   * @method moveToShelf
+   * @param {Object} book- search query string
+   * @param {String} shelf- bookshelf(category) to be updated
+   * @return : none
+   */
+  moveToShelf = (book, shelf) => {
+    BooksAPI.update(book, shelf);
+    this.setState((state) => {
+      let isNewBookAdded = true;
+      let updatedBooks = [];
+
+      // Update the bookshelf and return the new book array
+      updatedBooks = state.books.map((bk) => {
+        if (book.id === bk.id) {
           bk.shelf = shelf;
+
+          /**
+           * This flag denotes if the book is added from searh page or not
+           * if the book is allredy present in main page state then set the
+           * flag to false so that it won't be added to this state again
+           */
           isNewBookAdded = false;
         }
         return bk;
       });
+
       book.shelf = shelf;
+
+      // Check the flag and concate to or update the existing book state of main page acordingly
       return isNewBookAdded ? { books: state.books.concat([book]) } : { books: updatedBooks };
     });
   }
+
+  /**
+   * The render method will be called each time an update happens.
+   * This is a lifecycle hook which runs after a component is added
+   * or re-rendered to the DOM.
+   */
   render() {
-    let readBooks= [],
-        readingBooks= [],
-        wantToReadBooks = [];
-    this.state.books.map((book)=>{
-      switch(book.shelf){
+    let readBooks = [];
+    let readingBooks = [];
+    let wantToReadBooks = [];
+    /**
+     * loop through all the books and put it in 3 different array
+     * based on the bookshelf they belogs to. Later these arrays
+     * are passed to to ListBooks component as props which
+     * are used to render books in different section as per shelf
+     */
+    this.state.books.map((book) => {
+      switch (book.shelf) {
         case 'read':
           readBooks.push(book);
           break;
@@ -57,7 +92,7 @@ class BooksApp extends React.Component {
     });
     return (
       <div className="app">
-        <Route exact path='/' render={() =>(
+        <Route exact path='/' render={() => (
           <div className="list-books">
             <div className="list-books-title">
               <h1>MyReads</h1>
@@ -69,13 +104,13 @@ class BooksApp extends React.Component {
               <Link to="/search" className="search-books">Add a book</Link>
             </div>
           </div>
-          )}/>
-          <Route exact path='/search' render={() =>(
-            <SearchBooks books={this.state.books} onChangeShelf={this.moveToShelf} />
-          )}/>
+        )}/>
+        <Route exact path='/search' render={() => (
+          <SearchBooks books={this.state.books} onChangeShelf={this.moveToShelf} />
+        )}/>
       </div>
-    )
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;
