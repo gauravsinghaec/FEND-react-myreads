@@ -75,7 +75,9 @@ class SearchBooks extends React.Component {
     return (
       <div className="search-books">
         <div className="search-books-bar">
-          <Link to="/" className="close-search">Close</Link>
+          <Link to="/" className="close-search">
+            Close
+          </Link>
           <div className="search-books-input-wrapper">
             {/*
               NOTES: The search from BooksAPI is limited to a particular set of search terms.
@@ -85,7 +87,9 @@ class SearchBooks extends React.Component {
               So, don't worry if you don't find a specific author or title.
               Every search is limited by search terms.
             */}
-            <input type="text" placeholder="Search by title or author"
+            <input
+              type="text"
+              placeholder="Search by title or author"
               value={query}
               onChange={(event) => this.updateQuery(event.target.value)}
             />
@@ -101,16 +105,30 @@ class SearchBooks extends React.Component {
                     </div>
                     <div className="book-shelf-changer">
                       <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => this.props.onChangeShelf(book, event.target.value)}>
-                        <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
+                        <option value="move" disabled>
+                          Move to...
+                        </option>
+                        <option value="currentlyReading">
+                          Currently Reading
+                        </option>
+                        <option value="wantToRead">
+                          Want to Read
+                        </option>
+                        <option value="read">
+                          Read
+                        </option>
+                        <option value="none">
+                          None
+                        </option>
                       </select>
                     </div>
                   </div>
-                  <div className="book-title">{ book.title }</div>
-                  <div className="book-authors">{ book.authors }</div>
+                  <div className="book-title">
+                    { book.title }
+                  </div>
+                  <div className="book-authors">
+                    { book.authors }
+                  </div>
                 </div>
               </li>
             ))}
