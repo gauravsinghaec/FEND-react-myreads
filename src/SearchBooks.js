@@ -12,7 +12,7 @@ class SearchBooks extends React.Component {
 // Add state as class property outside contructor
   state = {
     showBooks: [],
-    query: ''
+    query: '',
   };
 
   /**

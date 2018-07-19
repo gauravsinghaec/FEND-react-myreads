@@ -9,7 +9,7 @@ import SearchBooks from './SearchBooks';
 class BooksApp extends React.Component {
 // Add state as class property outside contructor
   state = {
-    books: []
+    books: [],
   }
 
   /**
@@ -92,22 +92,34 @@ class BooksApp extends React.Component {
     });
     return (
       <div className="app">
-        <Route exact path='/' render={() => (
-          <div className="list-books">
-            <div className="list-books-title">
-              <h1>MyReads</h1>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <div className="list-books">
+              <div className="list-books-title">
+                <h1>
+                  MyReads
+                </h1>
+              </div>
+              <ListBooks shelf="Currently Reading" books={readingBooks} onChangeShelf={this.moveToShelf} />
+              <ListBooks shelf="Want to Read" books={wantToReadBooks} onChangeShelf={this.moveToShelf} />
+              <ListBooks shelf="Read" books={readBooks} onChangeShelf={this.moveToShelf} />
+              <div className="open-search">
+                <Link to="/search" className="search-books">
+                  Add a book
+                </Link>
+              </div>
             </div>
-            <ListBooks shelf={'Currently Reading'} books={readingBooks} onChangeShelf={this.moveToShelf} />
-            <ListBooks shelf={'Want to Read'} books={wantToReadBooks} onChangeShelf={this.moveToShelf} />
-            <ListBooks shelf={'Read'} books={readBooks} onChangeShelf={this.moveToShelf} />
-            <div className="open-search">
-              <Link to="/search" className="search-books">Add a book</Link>
-            </div>
-          </div>
-        )}/>
-        <Route exact path='/search' render={() => (
-          <SearchBooks books={this.state.books} onChangeShelf={this.moveToShelf} />
-        )}/>
+          )}
+        />
+        <Route
+          exact
+          path="/search"
+          render={() => (
+            <SearchBooks books={this.state.books} onChangeShelf={this.moveToShelf} />
+          )}
+        />
       </div>
     );
   }
