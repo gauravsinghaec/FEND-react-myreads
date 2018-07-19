@@ -20,7 +20,6 @@ class BooksApp extends React.Component {
     BooksAPI.getAll()
       .then((books) => {
         this.setState({ books });
-        console.log(books);
       });
   }
 
@@ -35,30 +34,33 @@ class BooksApp extends React.Component {
    */
   moveToShelf = (book, shelf) => {
     BooksAPI.update(book, shelf);
-    this.setState((state) => {
-      let isNewBookAdded = true;
-      let updatedBooks = [];
+    const updatedBook = book;
+    const { books } = this.state;
+    let isNewBookAdded = true;
+    let updatedBooks = [];
 
-      // Update the bookshelf and return the new book array
-      updatedBooks = state.books.map((bk) => {
-        if (book.id === bk.id) {
-          bk.shelf = shelf;
+    // Update the bookshelf and return the new book array
+    updatedBooks = books.map((bk) => {
+      const shelfBook = bk;
+      if (updatedBook.id === bk.id) {
+        shelfBook.shelf = shelf;
 
-          /**
-           * This flag denotes if the book is added from searh page or not
-           * if the book is allredy present in main page state then set the
-           * flag to false so that it won't be added to this state again
-           */
-          isNewBookAdded = false;
-        }
-        return bk;
-      });
-
-      book.shelf = shelf;
-
-      // Check the flag and concate to or update the existing book state of main page acordingly
-      return isNewBookAdded ? { books: state.books.concat([book]) } : { books: updatedBooks };
+        /**
+         * This flag denotes if the book is added from searh page or not
+         * if the book is allredy present in main page state then set the
+         * flag to false so that it won't be added to this state again
+         */
+        isNewBookAdded = false;
+      }
+      return shelfBook;
     });
+
+    updatedBook.shelf = shelf;
+
+    this.setState(state => (
+      // Check the flag and concate to or update the existing book state of main page acordingly
+      isNewBookAdded ? { books: state.books.concat([book]) } : { books: updatedBooks }
+    ));
   }
 
   /**
@@ -77,7 +79,7 @@ class BooksApp extends React.Component {
      * are passed to to ListBooks component as props which
      * are used to render books in different section as per shelf
      */
-    books.map((book) => {
+    books.forEach((book) => {
       switch (book.shelf) {
         case 'read':
           readBooks.push(book);
@@ -87,6 +89,8 @@ class BooksApp extends React.Component {
           break;
         case 'currentlyReading':
           readingBooks.push(book);
+          break;
+        default:
           break;
       }
     });
