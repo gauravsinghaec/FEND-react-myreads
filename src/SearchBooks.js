@@ -38,15 +38,16 @@ class SearchBooks extends React.Component {
     if (query.trim()) {
       BooksAPI.search(query)
         .then((searchedBooks) => {
+          let matchedBooks = searchedBooks;
           // reset the search book state is we didn't get any data from the API
-          if (!searchedBooks || !searchedBooks.length) searchedBooks = [];
+          if (!searchedBooks || !searchedBooks.length) matchedBooks = [];
 
           /**
            * loop through searched results and override the book which are
            * allredy present in main page state before updating the book state
            * of search page
            */
-          searchedBooks = searchedBooks.map((book) => {
+          matchedBooks = searchedBooks.map((book) => {
             for (const mainPageBook of mainPageBooks) {
               if (mainPageBook.id === book.id) {
                 book = mainPageBook;
@@ -56,9 +57,7 @@ class SearchBooks extends React.Component {
           });
 
           // Update the state in real time on searh page
-          this.setState((state) => ({
-            showBooks: searchedBooks
-          }));
+          this.setState({ showBooks: matchedBooks });
         })
         .catch((e) => { console.log(e); });
     } else {
@@ -91,20 +90,19 @@ class SearchBooks extends React.Component {
               type="text"
               placeholder="Search by title or author"
               value={query}
-              onChange={(event) => this.updateQuery(event.target.value)}
+              onChange={(event) => { this.updateQuery(event.target.value); }}
             />
           </div>
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            { this.state.showBooks.map((book) => (
+            { this.state.showBooks.map(book => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
-                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : ''})` }}>
-                    </div>
+                    <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : ''})` }} />
                     <div className="book-shelf-changer">
-                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => this.props.onChangeShelf(book, event.target.value)}>
+                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => { this.props.onChangeShelf(book, event.target.value); }}>
                         <option value="move" disabled>
                           Move to...
                         </option>
