@@ -1,21 +1,22 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-const ListBooks = props => (
+const ListBooks = ({ shelf, books, onChangeShelf }) => (
   <div className="list-books-content">
     <div>
       <div className="bookshelf">
         <h2 className="bookshelf-title">
-          {props.shelf}
+          {shelf}
         </h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
-            {props.books.map(book => (
+            {books.map(book => (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${(book.imageLinks && book.imageLinks.thumbnail) ? book.imageLinks.thumbnail : ''})` }} />
                     <div className="book-shelf-changer">
-                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => { props.onChangeShelf(book, event.target.value); }}>
+                      <select defaultValue={book.shelf ? book.shelf : 'none'} onChange={(event) => { onChangeShelf(book, event.target.value); }}>
                         <option value="move" disabled>
                           Move to...
                         </option>
@@ -49,5 +50,12 @@ const ListBooks = props => (
     </div>
   </div>
 );
+
+// Add PropTypes validation
+ListBooks.propTypes = {
+  shelf: PropTypes.string.isRequired,
+  books: PropTypes.instanceOf(Array).isRequired,
+  onChangeShelf: PropTypes.func.isRequired,
+};
 
 export default ListBooks;
