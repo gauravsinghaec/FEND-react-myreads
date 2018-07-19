@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import * as BooksAPI from './BooksAPI';
 
 /**
@@ -9,7 +10,13 @@ import * as BooksAPI from './BooksAPI';
  * @constructor
  */
 class SearchBooks extends React.Component {
-// Add state as class property outside contructor
+  // Add state as class property outside contructor
+  static propTypes = {
+    mainPageBooks: PropTypes.instanceOf(Array).isRequired,
+    onChangeShelf: PropTypes.func.isRequired,
+  };
+
+  // Add state as class property outside contructor
   state = {
     showBooks: [],
     query: '',
