@@ -10,7 +10,7 @@ import * as BooksAPI from './BooksAPI';
  * @constructor
  */
 class SearchBooks extends React.Component {
-  // Add state as class property outside contructor
+  // Add PropTypes validation
   static propTypes = {
     mainPageBooks: PropTypes.instanceOf(Array).isRequired,
     onChangeShelf: PropTypes.func.isRequired,
