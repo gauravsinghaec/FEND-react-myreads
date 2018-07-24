@@ -33,7 +33,6 @@ class BooksApp extends React.Component {
    * @return : none
    */
   moveToShelf = (book, shelf) => {
-    BooksAPI.update(book, shelf);
     const updatedBook = book;
     const { books } = this.state;
     let isNewBookAdded = true;
@@ -57,10 +56,13 @@ class BooksApp extends React.Component {
 
     updatedBook.shelf = shelf;
 
-    this.setState(state => (
-      // Check the flag and concate to or update the existing book state of main page acordingly
-      isNewBookAdded ? { books: state.books.concat([book]) } : { books: updatedBooks }
-    ));
+    BooksAPI.update(book, shelf)
+      .then(() => {
+        this.setState(state => (
+        // Check the flag and concate to or update the existing book state of main page acordingly
+          isNewBookAdded ? { books: state.books.concat([book]) } : { books: updatedBooks }
+        ));
+      });
   }
 
   /**
