@@ -54,7 +54,7 @@ class SearchBooks extends React.Component {
            * allredy present in main page state before updating the book state
            * of search page
            */
-          matchedBooks = searchedBooks.map((book) => {
+          matchedBooks = matchedBooks.map((book) => {
             for (const mainPageBook of mainPageBooks) {
               if (mainPageBook.id === book.id) {
                 book = mainPageBook;
