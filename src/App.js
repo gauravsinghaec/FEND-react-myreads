@@ -69,31 +69,13 @@ class BooksApp extends React.Component {
    * or re-rendered to the DOM.
    */
   render() {
-    const readBooks = [];
-    const readingBooks = [];
-    const wantToReadBooks = [];
     const { books } = this.state;
-    /**
-     * loop through all the books and put it in 3 different array
-     * based on the bookshelf they belogs to. Later these arrays
-     * are passed to to ListBooks component as props which
-     * are used to render books in different section as per shelf
-     */
-    books.forEach((book) => {
-      switch (book.shelf) {
-        case 'read':
-          readBooks.push(book);
-          break;
-        case 'wantToRead':
-          wantToReadBooks.push(book);
-          break;
-        case 'currentlyReading':
-          readingBooks.push(book);
-          break;
-        default:
-          break;
-      }
-    });
+    const shelves = {
+      currentlyReading: ['Currently Reading', 'currentlyReading'],
+      wantToRead: ['Want to Read', 'wantToRead'],
+      read: ['Read', 'read'],
+    };
+
     return (
       <div className="app">
         <Route
@@ -106,9 +88,23 @@ class BooksApp extends React.Component {
                   MyReads
                 </h1>
               </div>
-              <ListBooks shelf="Currently Reading" books={readingBooks} onChangeShelf={this.moveToShelf} />
-              <ListBooks shelf="Want to Read" books={wantToReadBooks} onChangeShelf={this.moveToShelf} />
-              <ListBooks shelf="Read" books={readBooks} onChangeShelf={this.moveToShelf} />
+              {
+                /**
+                 * Map over shelves object to render your bookshelves:
+                 * books are passed to ListBooks component as props which
+                 * are filtered using shelf props to render books in different
+                 * section as per shelf category
+                 */
+                Object.keys(shelves).map(shelf => (
+                  <ListBooks
+                    key={shelf}
+                    shelf={shelves[shelf][1]}
+                    books={books}
+                    title={shelves[shelf][0]}
+                    onChangeShelf={this.moveToShelf}
+                  />
+                ))
+              }
               <div className="open-search">
                 <Link to="/search" className="search-books">
                   Add a book

@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const ListBooks = ({ shelf, books, onChangeShelf }) => (
+const ListBooks = ({
+  shelf, books, title, onChangeShelf,
+}) => (
   <div className="list-books-content">
     <div>
       <div className="bookshelf">
         <h2 className="bookshelf-title">
-          {shelf}
+          {title}
         </h2>
         <div className="bookshelf-books">
           <ol className="books-grid">
             {books.map(book => (
+              book.shelf === shelf && (
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
@@ -43,7 +46,7 @@ const ListBooks = ({ shelf, books, onChangeShelf }) => (
                   </div>
                 </div>
               </li>
-            ))}
+              )))}
           </ol>
         </div>
       </div>
@@ -55,6 +58,7 @@ const ListBooks = ({ shelf, books, onChangeShelf }) => (
 ListBooks.propTypes = {
   shelf: PropTypes.string.isRequired,
   books: PropTypes.instanceOf(Array).isRequired,
+  title: PropTypes.string.isRequired,
   onChangeShelf: PropTypes.func.isRequired,
 };
 
