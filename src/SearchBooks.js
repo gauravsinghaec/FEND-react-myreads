@@ -21,6 +21,7 @@ class SearchBooks extends React.Component {
   state = {
     showBooks: [],
     query: '',
+    resultsNotAvailable: false,
   };
 
   /**
@@ -47,8 +48,12 @@ class SearchBooks extends React.Component {
       BooksAPI.search(query)
         .then((searchedBooks) => {
           let matchedBooks = searchedBooks;
+          let resultsFound = false;
           // reset the search book state is we didn't get any data from the API
-          if (!searchedBooks || !searchedBooks.length) matchedBooks = [];
+          if (!searchedBooks || !searchedBooks.length) {
+            matchedBooks = [];
+            resultsFound = true;
+          }
 
           /**
            * loop through searched results and override the book which are
@@ -65,7 +70,7 @@ class SearchBooks extends React.Component {
           });
 
           // Update the state in real time on searh page
-          this.setState({ showBooks: matchedBooks });
+          this.setState({ showBooks: matchedBooks, resultsNotAvailable: resultsFound });
         })
         .catch((e) => { console.log(e); });
     } else {
@@ -78,7 +83,7 @@ class SearchBooks extends React.Component {
    * or re-rendered to the DOM.
    */
   render() {
-    const { query, showBooks } = this.state;
+    const { query, showBooks, resultsNotAvailable } = this.state;
     const { onChangeShelf } = this.props;
     return (
       <div className="search-books">
@@ -109,6 +114,11 @@ class SearchBooks extends React.Component {
               <Book key={book.id} onChangeShelf={onChangeShelf} book={book} />
             ))}
           </ol>
+          { resultsNotAvailable && query && (
+            <p className="books-grid">
+              Books not found.
+            </p>)
+          }
         </div>
       </div>
     );
